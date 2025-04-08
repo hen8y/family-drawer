@@ -3,13 +3,11 @@ import { Iconify } from "react-native-iconify";
 import Animated from "react-native-reanimated";
 
 export default function BaseModal({
-    isModalVisible,
     baseTopStyle,
     baseBottomStyle,
     setIsModalVisible,
     handleViewRecovery,
 }: {
-    isModalVisible: boolean;
     baseTopStyle: any;
     baseBottomStyle: any;
     setIsModalVisible: (visible: boolean) => void;

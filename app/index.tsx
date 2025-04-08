@@ -9,7 +9,7 @@ export default function Family() {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [visibleSection, setVisibleSection] = useState<string | null>(null);
     const [shouldRender, setShouldRender] = useState<boolean>(false);
-    const [stiffness, setStiffness] = useState<number>(100);
+    const [duration, setDuration] = useState<number>(100);
     const [direction, setDirection] = useState<"translateX" | "translateY">("translateX");
     const sectionTranslate = useSharedValue(10);
     const baseTopTranslateY = useSharedValue(0);
@@ -29,8 +29,8 @@ export default function Family() {
             opacity.value = withTiming(1);
         } else {
             iconScaleUp.value = withTiming(0.02);
-            baseTopTranslateY.value = withTiming(0);
-            baseBottomTranslateY.value = withTiming(0);
+            baseTopTranslateY.value = withTiming(0, { duration });
+            baseBottomTranslateY.value = withTiming(0, { duration });
             sectionTranslate.value = withTiming(direction === "translateX" ? 100 : 10, { duration: 100 }, (finished) => {
                 if (finished) runOnJS(setShouldRender)(false);
             });
@@ -103,14 +103,14 @@ export default function Family() {
 
                 <View style={{ marginTop: 20 }}>
                     <Text style={{ fontSize: 16, fontWeight: "600" }}>
-                        Animation Speed: {(((100 - stiffness) / 90) * 5).toFixed(1)} seconds
+                        Animation Speed: {(((duration) / 999) * 5).toFixed(1)} seconds
                     </Text>
                     <Slider
-                        value={stiffness}
-                        onValueChange={(value) => setStiffness(100 - value)}
+                        value={duration}
+                        onValueChange={(value) => setDuration(value)}
                         style={{ width: 200, height: 40 }}
-                        minimumValue={1}
-                        maximumValue={99}
+                        minimumValue={100}
+                        maximumValue={999}
                     />
                 </View>
             </View>
@@ -136,16 +136,17 @@ export default function Family() {
                         style={[styles.center, { flex: 1 }]}
                     >
                         <View style={styles.modalContainer}>
+
                             {/* Base Modal View */}
+
                             <BaseModal
-                                isModalVisible={isModalVisible}
                                 setIsModalVisible={setIsModalVisible}
                                 handleViewRecovery={handleViewRecovery}
                                 baseTopStyle={baseTopStyle}
                                 baseBottomStyle={baseBottomStyle}
                             />
 
-                            {/* Private Key Section */}
+                            {/* Section Modal */}
                             {shouldRender && (
                                 <PrivateKey
                                     iconScale={iconScale}
